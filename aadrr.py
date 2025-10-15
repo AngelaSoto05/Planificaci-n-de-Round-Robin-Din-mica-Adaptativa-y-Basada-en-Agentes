@@ -1,37 +1,39 @@
 # aadrr.py
 import os
 import json
-from agent import SchedulingAgent
+from agente import  AgentePlanificacion
 
-def load_processes(filename="process_data.json"):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    full_path = os.path.join(base_dir, filename)
-    with open(full_path, "r") as f:
+def cargar_procesos(archivo="datos_procesos.json"):
+    """Carga los datos de procesos desde un archivo JSON"""
+    directorio_base = os.path.dirname(os.path.abspath(__file__))
+    ruta_completa = os.path.join(directorio_base, archivo)
+    with open(ruta_completa, "r") as f:
         return json.load(f)
 
-def aadrr_scheduler(processes):
-    agent = SchedulingAgent(processes)
-    timeline, completed, quantum_log, agent_log = agent.run()
-    return timeline, completed, quantum_log, agent_log
+def planificador_aadrr(procesos):
+    """Ejecuta el planificador AADRR basado en agentes"""
+    agente = AgentePlanificacion(procesos)
+    linea_tiempo, completados, registro_quantum, registro_agente = agente.ejecutar()
+    return linea_tiempo, completados, registro_quantum, registro_agente
 
-# CLI Test
+# Prueba por línea de comandos
 if __name__ == "__main__":
-    processes = load_processes()
-    timeline, completed, quantum_log, agent_log = aadrr_scheduler(processes)
+    procesos = cargar_procesos()
+    linea_tiempo, completados, registro_quantum, registro_agente = planificador_aadrr(procesos)
 
-    print("\nExecution Timeline:")
-    for slot in timeline:
-        print(f"{slot['pid']}: {slot['start']} → {slot['end']}")
+    print("\nLínea de Tiempo de Ejecución:")
+    for segmento in linea_tiempo:
+        print(f"{segmento['pid']}: {segmento['inicio']} → {segmento['fin']}")
 
-    print("\n📋 Process Completion Table:")
-    for p in completed:
-        print(f"{p['pid']} completed at {p['completion']} | TAT={p['tat']} | WT={p['wt']}")
+    print("\n📋 Tabla de Completado de Procesos:")
+    for p in completados:
+        print(f"{p['pid']} completado en {p['completado']} | TAT={p['tat']} | WT={p['wt']}")
 
-    print("\n🌀 Dynamic Time Quantum Log:")
-    for t, q in quantum_log:
-        print(f"Time {t}: DTQ = {q}")
+    print("\n🌀 Registro de Quantum Dinámico:")
+    for tiempo, quantum in registro_quantum:
+        print(f"Tiempo {tiempo}: DTQ = {quantum}")
 
-    print("\n🤖 Agent Decision Log:")
-    for entry in agent_log:
-        print(f"Cycle {entry['cycle']} @ {entry['start_time']}: "
-              f"DTQ={entry['dtq']} | Ranked: {entry['ranked_pids']}")
+    print("\n🤖 Registro de Decisiones del Agente:")
+    for entrada in registro_agente:
+        print(f"Ciclo {entrada['ciclo']} @ {entrada['tiempo_inicio']}: "
+              f"DTQ={entrada['dtq']} | Ordenados: {entrada['pids_ordenados']}")

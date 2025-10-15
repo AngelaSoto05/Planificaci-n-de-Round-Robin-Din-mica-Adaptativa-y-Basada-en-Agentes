@@ -58,7 +58,8 @@ def plot_comparison():
 
     plt.suptitle("Algorithm Performance Comparison")
     plt.tight_layout()
-    plt.savefig("charts/algorithm_comparison.png")
+   #plt.savefig("charts/algorithm_comparison.png")
+    plt.savefig("algorithm_comparison.png")
     plt.show()
 
 if __name__ == "__main__":

@@ -70,7 +70,10 @@ def visualize_timeline(timeline):
         )
 
     plt.tight_layout()
-    plt.show()
+    #plt.show()
+    plt.savefig('mi_grafica.png')  # Guarda como PNG
+    plt.savefig('mi_grafica.pdf')  # Guarda como PDF
+    plt.close()   
 
 def generate_comparison_chart(all_results, filename="app/static/comparison_chart.png"):
     algorithms = list(all_results.keys())
